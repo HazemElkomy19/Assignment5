@@ -1,0 +1,43 @@
+-- Table: Musicians
+CREATE TABLE Musicians (
+    MusicianID SERIAL PRIMARY KEY,
+    Name TEXT,
+    Street TEXT,
+    City TEXT,
+    Phone TEXT
+);
+
+-- Table: Instruments
+CREATE TABLE Instruments (
+    InstrumentName TEXT PRIMARY KEY,
+    MusicalKey TEXT
+);
+
+-- Many-to-Many: Musicians play Instruments
+CREATE TABLE MusicianInstruments (
+    MusicianID INT REFERENCES Musicians(MusicianID),
+    InstrumentName TEXT REFERENCES Instruments(InstrumentName),
+    PRIMARY KEY (MusicianID, InstrumentName)
+);
+
+-- Table: Albums
+CREATE TABLE Albums (
+    AlbumID SERIAL PRIMARY KEY,
+    Title TEXT UNIQUE,
+    CopyrightDate DATE,
+    ProducerID INT REFERENCES Musicians(MusicianID)
+);
+
+-- Table: Songs
+CREATE TABLE Songs (
+    SongTitle TEXT PRIMARY KEY,
+    Author TEXT,
+    AlbumID INT REFERENCES Albums(AlbumID)
+);
+
+-- Many-to-Many: Musicians perform Songs
+CREATE TABLE SongPerformers (
+    SongTitle TEXT REFERENCES Songs(SongTitle),
+    MusicianID INT REFERENCES Musicians(MusicianID),
+    PRIMARY KEY (SongTitle, MusicianID)
+);
